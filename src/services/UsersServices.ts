@@ -3,7 +3,6 @@ import { ICreate, IUpdate } from "../interfaces/UsersInterface";
 import { UsersRepository } from "../repositories/UsersRepository"
 import { s3 } from "../config/aws";
 import { v4 as uuid } from "uuid"
-import { error } from "console";
 import { sign } from "jsonwebtoken";
 
 

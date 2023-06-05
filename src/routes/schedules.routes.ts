@@ -1,16 +1,37 @@
 import { Router } from "express";
-import { ScheduleController } from "../controllers/ScheduleController";
+import { SchedulesController } from "../controllers/SchedulesController";
+import { AuthMiddleware } from "../middleware/AuthMiddleware";
 
 class SchedulesRoutes {
     private router: Router;
-    private schedulesController: ScheduleController;
+    private schedulesController: SchedulesController;
+    private authMiddleware: AuthMiddleware;
+
     constructor() {
         this.router = Router();
-        this.schedulesController = new ScheduleController()
+        this.schedulesController = new SchedulesController();
+        this.authMiddleware = new AuthMiddleware();
     }
     getRoutes(): Router {
-        this.router.post('/',
-        this.schedulesController.store.bind(this.schedulesController));
+        this.router.post(
+            '/',
+            this.authMiddleware.auth.bind(this.authMiddleware),
+            this.schedulesController.store.bind(this.schedulesController),
+          );
+      
+
+        this.router.get(
+            '/',
+            this.authMiddleware.auth.bind(this.authMiddleware),
+            this.schedulesController.index.bind(this.schedulesController),
+        );
+
+        this.router.put(
+            '/:id',
+            this.authMiddleware.auth.bind(this.authMiddleware),
+            this.schedulesController.index.bind(this.schedulesController), 
+        )
+
         return this.router;
     }
 }

@@ -2,10 +2,10 @@ import { ICreate } from "../interfaces/SchedulesInterface";
 import { isBefore, startOfHour } from "date-fns"
 import { SchedulesRepository } from "../repositories/ServiceRepository";
 
-export class ScheduleService {
-    private scheduleRepository: SchedulesRepository
+export class SchedulesService {
+    private schedulesRepository: SchedulesRepository;
     constructor() {
-        this.scheduleRepository = new SchedulesRepository()
+        this.schedulesRepository = new SchedulesRepository()
     }
 
     async create({ name, phone, date }: ICreate) {
@@ -17,15 +17,25 @@ export class ScheduleService {
             throw new Error('Data inatingivel!.... volte no tempo antes de tentar essa data novamente!....')
         }
         
-        const checkIsAvaible = await this.scheduleRepository.find(hourStart)
+        const checkIsAvaible = await this.schedulesRepository.find(hourStart)
         if (checkIsAvaible) {
             throw new Error("Data não disponivel!...")
         }
-        const create = await this.scheduleRepository.create({
+        const create = await this.schedulesRepository.create({
             name,
             phone,
             date: hourStart
         })
         return create
     };
+    async index(date: Date) {
+        const result = await this.schedulesRepository.findAll(date);
+        console.log(result)
+
+        return result;
+    }
+
+    async update() {
+
+    }
 }
